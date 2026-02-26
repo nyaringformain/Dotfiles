@@ -31,9 +31,6 @@ aur_packages=(
 
     # Code Editors and IDEs
     visual-studio-code-bin sublime-text-4
-        
-    # Communication
-    vesktop
 
     # Misc
     ttf-segoe-ui-variable sddm-astronaut-theme apple_cursor whitesur-icon-theme tint
