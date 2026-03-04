@@ -31,9 +31,23 @@
                     "foreground": "p:black",
                     "leading_diamond": "\ue0b6",
                     "style": "diamond",
-                    "template": " {{ .UserName }} ",
+                    "template": "{{ if ne (.Segments.Contains \"Python\") true }} {{ .UserName }} {{ end }}",
                     "trailing_diamond": "\ue0b0",
                     "type": "session"
+                },
+                {
+                    "background": "p:yellow",
+                    "foreground": "p:black",
+                    "leading_diamond": "\ue0b6",
+                    "properties": {
+                        "display_mode": "environment",
+                        "home_enabled": true,
+                        "folder_name_fallback": false
+                    },
+                    "style": "diamond",
+                    "template": " ({{ .Venv }}) ",
+                    "trailing_diamond": "\ue0b0",
+                    "type": "python"
                 },
                 {
                     "background": "p:blue",
@@ -91,5 +105,5 @@
         "template": "<p:red>\uf489 </><p:blue>\uf0da</><p:pink>\uf105</> "
     },
     "final_space": true,
-    "version": 7
+    "version": 8
 }
