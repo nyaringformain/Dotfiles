@@ -12,6 +12,6 @@ done | rofi -dmenu -p " ")
 
 image_fullname_path=$(find "$wallpapers_dir" -type f -name "$selected_wallpaper.*" | head -n 1)
 
-swww img "$image_fullname_path" --transition-type any --transition-duration 2
+awww img "$image_fullname_path" --transition-type any --transition-duration 2
 
 ~/.config/viegphunt/wallpaper_effects.sh
