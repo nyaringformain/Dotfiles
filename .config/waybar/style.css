@@ -1,4 +1,3 @@
-/* @import "$HOME/.config/colors/colors.css" */
 @import "../colors/colors.css";
 
 * {
@@ -30,15 +29,15 @@ tooltip {
     padding: 0 5px;
 }
 #workspaces button:hover {
-    color: @pink;
+    color: @accent;
     transition: none;
-    border-bottom: 1px solid @pink;
+    border-bottom: 1px solid @accent;
     padding: 0 8px;
 }
 
 #workspaces button.active {
-    color: @pink;
-    border: 2px solid @pink;
+    color: @accent;
+    border: 2px solid @accent;
     padding: 0 8px;
     margin: 0 2px;
 }
@@ -54,6 +53,7 @@ tooltip {
 #network,
 #battery,
 #pulseaudio,
+#custom-weather,
 #clock {
     color: @foreground;
     margin: 1px 0;
@@ -65,6 +65,7 @@ tooltip {
 #network:hover,
 #battery:hover,
 #pulseaudio:hover,
+#custom-weather:hover,
 #clock:hover {
     background-color: alpha(@select, 0.6);
 }
@@ -85,9 +86,13 @@ tooltip {
     color: @orange;
 }
 
+#custom-weather {
+    color: @accent;
+}
+
 #clock {
     margin-right: 10px;
-    color: @blue;
+    color: @accent;
 }
 
 #custom-power {

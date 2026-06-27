@@ -46,7 +46,7 @@ configuration {
 }
 #element.selected.normal {
     background-color: @selected-background;
-    text-color:       @foreground;
+    text-color:       @selected-foreground;
 }
 element-text, element-icon {
     size:             45px;
@@ -59,7 +59,7 @@ element-text, element-icon {
     border:       0;
     handle-width: 8px ;
     padding:      0;
-    handle-color: @select;
+    handle-color: @accent;
 }
 
 #inputbar {

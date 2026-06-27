@@ -1,7 +1,7 @@
 {
     "modules-left": ["custom/power", "hyprland/workspaces"],
     // "modules-center": [],
-    "modules-right": ["tray", "bluetooth", "network", "battery", "pulseaudio", "clock"],
+    "modules-right": ["tray", "bluetooth", "network", "battery", "pulseaudio", "custom/weather", "clock"],
 
     "custom/power": {
         "format" : "⭘ ",
@@ -65,6 +65,14 @@
             "default": [" "],
         },
         "on-click": "pavucontrol",
+    },
+
+    "custom/weather": {
+        "exec": "~/.config/viegphunt/weather.sh --json",
+        "interval": 900,
+        "format": "{}",
+        "return-type": "json",
+        "tooltip": true,
     },
 
     "clock": {
