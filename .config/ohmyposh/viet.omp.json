@@ -67,10 +67,11 @@
                         "branch_icon": "",
                         "fetch_stash_count": true,
                         "fetch_status": false,
-                        "fetch_upstream_icon": true
+                        "fetch_upstream_icon": false,
+                        "no_commits_icon": ""
                     },
                     "style": "diamond",
-                    "template": " \ue725({{ .UpstreamIcon }} {{ .HEAD }}{{ if gt .StashCount 0 }} \ueb4b {{ .StashCount }}{{ end }}) ",
+                    "template": "{{ if .HEAD }} \ue725({{ .HEAD }}{{ if gt .StashCount 0 }} stash:{{ .StashCount }}{{ end }}) {{ end }}",
                     "trailing_diamond": "\ue0b0",
                     "type": "git"
                 },

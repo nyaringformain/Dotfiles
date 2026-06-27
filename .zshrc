@@ -104,8 +104,10 @@ eval "$(zoxide init zsh)"
 setopt interactivecomments
 
 
-# Pokemon startup
-pokemon-colorscripts --no-title -s -r
+# Pixel Character Viewer startup
+if [[ -o interactive && -x "$HOME/.local/bin/pixel-character-viewer" ]]; then
+    "$HOME/.local/bin/pixel-character-viewer"
+fi
 
 # Initialize Oh-My-Posh
 eval "$(oh-my-posh init zsh --config ~/.config/ohmyposh/viet.omp.json)"

@@ -1,0 +1,37 @@
+#!/usr/bin/env zsh
+
+pixel_character_viewer() {
+  emulate -L zsh
+  setopt null_glob
+
+  [[ -t 1 ]] || return 0
+
+  local base="${PIXEL_CHARACTER_VIEWER_DIR:-$HOME/.local/share/pixel-character-viewer}"
+  local -a images
+  images=("$base"/**/*.png(N))
+  (( ${#images} > 0 )) || return 0
+
+  local img="${images[$(( (RANDOM % ${#images}) + 1 ))]}"
+  local size="${PIXEL_CHARACTER_VIEWER_SIZE:-192}"
+
+  if command -v kitty >/dev/null 2>&1 &&
+     [[ "${TERM_PROGRAM:-}" == "ghostty" || "${TERM:-}" == "xterm-kitty" || -n "${KITTY_WINDOW_ID:-}" ]]; then
+    kitty +kitten icat --stdin no --transfer-mode stream --align left --fit none "$img" 2>/dev/null && return 0
+  fi
+
+  if command -v img2sixel >/dev/null 2>&1; then
+    if command -v magick >/dev/null 2>&1; then
+      local tmp="${TMPDIR:-/tmp}/pixel-character-viewer-${RANDOM}-${RANDOM}.png"
+      magick "$img" -resize "${size}x${size}>" "$tmp" 2>/dev/null && img2sixel "$tmp" 2>/dev/null
+      local exit_status=$?
+      [[ -f "$tmp" ]] && rm -f "$tmp"
+      (( exit_status == 0 )) && return 0
+    else
+      img2sixel -w "$size" "$img" 2>/dev/null && return 0
+    fi
+  fi
+
+  print -r -- "[pixel character image: $img]"
+}
+
+pixel_character_viewer "$@"
