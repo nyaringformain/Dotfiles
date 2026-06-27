@@ -16,7 +16,7 @@ done | rofi -dmenu -p " ")
 image_fullname_path=$(find "$wallpapers_dir" -type f -name "$selected_wallpaper.*" | head -n 1)
 [[ -n "$image_fullname_path" && -f "$image_fullname_path" ]] || exit 1
 
-awww img "$image_fullname_path" --transition-type any --transition-duration 2
+awww img "$image_fullname_path" --transition-type any --transition-duration 2 || exit 1
 
 mkdir -p "$(dirname "$current_wallpaper_file")"
 printf '%s\n' "$image_fullname_path" > "$current_wallpaper_file"

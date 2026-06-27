@@ -27,6 +27,19 @@ run_theme() {
     "$repo_root/.config/viegphunt/theme_apply.sh" "$@"
 }
 
+install_fake_viegphunt_hooks() {
+    mkdir -p "$HOME/.config/viegphunt"
+    cat > "$HOME/.config/viegphunt/wallpaper_effects.sh" <<'SCRIPT'
+#!/usr/bin/env bash
+printf 'effects\n' >> "$HOME/hook.log"
+SCRIPT
+    cat > "$HOME/.config/viegphunt/theme_apply.sh" <<'SCRIPT'
+#!/usr/bin/env bash
+printf 'theme\n' >> "$HOME/hook.log"
+SCRIPT
+    chmod +x "$HOME/.config/viegphunt/wallpaper_effects.sh" "$HOME/.config/viegphunt/theme_apply.sh"
+}
+
 test_mono_none_generation() {
     run_theme --base mono --accent none --no-reload
 
@@ -106,11 +119,83 @@ SCRIPT
     [[ "$output" == *'"tooltip":"Weather unavailable"'* ]] || fail "Expected JSON weather tooltip fallback, got '$output'"
 }
 
+test_wallpaper_select_does_not_update_state_when_awww_fails() {
+    install_fake_viegphunt_hooks
+    mkdir -p "$HOME/Pictures/Wallpapers"
+    : > "$HOME/Pictures/Wallpapers/sample.png"
+    rm -f "$VIEGPHUNT_CURRENT_WALLPAPER" "$HOME/hook.log"
+
+    cat > "$tmpdir/bin/pidof" <<'SCRIPT'
+#!/usr/bin/env bash
+exit 1
+SCRIPT
+    cat > "$tmpdir/bin/rofi" <<'SCRIPT'
+#!/usr/bin/env bash
+printf 'sample\n'
+SCRIPT
+    cat > "$tmpdir/bin/awww" <<'SCRIPT'
+#!/usr/bin/env bash
+exit 44
+SCRIPT
+    chmod +x "$tmpdir/bin/pidof" "$tmpdir/bin/rofi" "$tmpdir/bin/awww"
+    PATH="$tmpdir/bin:$PATH"
+    export PATH
+
+    if "$repo_root/.config/viegphunt/wallpaper_select.sh"; then
+        fail "Expected wallpaper_select.sh to fail when awww img fails"
+    fi
+
+    [[ ! -e "$VIEGPHUNT_CURRENT_WALLPAPER" ]] || fail "wallpaper_select.sh wrote current wallpaper after awww failure"
+    [[ ! -e "$HOME/hook.log" ]] || fail "wallpaper_select.sh ran follow-up hooks after awww failure"
+}
+
+test_wallpaper_random_does_not_update_state_when_awww_fails() {
+    install_fake_viegphunt_hooks
+    mkdir -p "$HOME/Pictures/Wallpapers"
+    : > "$HOME/Pictures/Wallpapers/random.png"
+    rm -f "$VIEGPHUNT_CURRENT_WALLPAPER" "$HOME/hook.log"
+
+    cat > "$tmpdir/bin/awww" <<'SCRIPT'
+#!/usr/bin/env bash
+exit 44
+SCRIPT
+    chmod +x "$tmpdir/bin/awww"
+    PATH="$tmpdir/bin:$PATH"
+    export PATH
+
+    if "$repo_root/.config/viegphunt/wallpaper_random.sh"; then
+        fail "Expected wallpaper_random.sh to fail when awww img fails"
+    fi
+
+    [[ ! -e "$VIEGPHUNT_CURRENT_WALLPAPER" ]] || fail "wallpaper_random.sh wrote current wallpaper after awww failure"
+    [[ ! -e "$HOME/hook.log" ]] || fail "wallpaper_random.sh ran follow-up hooks after awww failure"
+}
+
+test_theme_menu_cancel_is_successful_noop() {
+    cat > "$tmpdir/bin/pidof" <<'SCRIPT'
+#!/usr/bin/env bash
+exit 1
+SCRIPT
+    cat > "$tmpdir/bin/rofi" <<'SCRIPT'
+#!/usr/bin/env bash
+exit 1
+SCRIPT
+    chmod +x "$tmpdir/bin/pidof" "$tmpdir/bin/rofi"
+    PATH="$tmpdir/bin:$PATH"
+    export PATH
+
+    "$repo_root/.config/viegphunt/theme_menu.sh" base || fail "Expected base menu cancel to exit 0"
+    "$repo_root/.config/viegphunt/theme_menu.sh" accent || fail "Expected accent menu cancel to exit 0"
+}
+
 test_mono_none_generation
 test_base_change_preserves_accent
 test_wallpaper_accent_uses_extracted_color
 test_wallpaper_accent_falls_back_to_blue
 test_weather_fallback
 test_weather_json_fallback
+test_wallpaper_select_does_not_update_state_when_awww_fails
+test_wallpaper_random_does_not_update_state_when_awww_fails
+test_theme_menu_cancel_is_successful_noop
 
 printf 'All theme system tests passed\n'

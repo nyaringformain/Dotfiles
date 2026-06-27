@@ -10,7 +10,7 @@ fi
 
 case "$mode" in
     base)
-        choice="$(printf 'Catppuccin\nMono\n' | rofi -dmenu -p 'Base Theme')"
+        choice="$(printf 'Catppuccin\nMono\n' | rofi -dmenu -p 'Base Theme')" || exit 0
         case "$choice" in
             Catppuccin) "$script_dir/theme_apply.sh" --base catppuccin ;;
             Mono) "$script_dir/theme_apply.sh" --base mono ;;
@@ -18,7 +18,7 @@ case "$mode" in
         esac
         ;;
     accent)
-        choice="$(printf 'None\nPink\nBlue\nWallpaper Auto\n' | rofi -dmenu -p 'Accent')"
+        choice="$(printf 'None\nPink\nBlue\nWallpaper Auto\n' | rofi -dmenu -p 'Accent')" || exit 0
         case "$choice" in
             None) "$script_dir/theme_apply.sh" --accent none ;;
             Pink) "$script_dir/theme_apply.sh" --accent pink ;;
