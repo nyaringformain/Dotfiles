@@ -32,7 +32,7 @@ yad --center --title="Keybinding Hints" --no-buttons --list \
 "  Shift W"        "        "  "Random wallpaper" \
 "  T"              "        "  "Base theme selector" \
 "  Shift T"        "        "  "Accent selector" \
-"  Print"          "        "  "Screenshot full screen" \
+"  Print"          "        "  "Screenshot monitor" \
 "  Shift Print"    "        "  "Screenshot region" \
 "" "" "" \
 "Workspaces"         "        "  "--------------------------------" \
